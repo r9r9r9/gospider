@@ -268,6 +268,10 @@ func NewCrawler(site *url.URL, cmd *cobra.Command) *Crawler {
 	}
 
 	whiteListDomain, _ := cmd.Flags().GetString("whitelist-domain")
+	// Make filter regex from the url that is being crawled.
+	if whiteListedDomain == "$HOST$" {
+		whiteListedDomain = site.Hostname()
+	}
 	if whiteListDomain != "" {
 		c.URLFilters = make([]*regexp.Regexp, 0)
 		c.URLFilters = append(c.URLFilters, regexp.MustCompile("http(s)?://"+whiteListDomain))
